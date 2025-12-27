@@ -1,7 +1,7 @@
 .header {
-  background-color: rgb(8, 79, 45);
+  background-color: #131921; /* amazon-like dark */
   color: white;
-  padding: 0 15px;
+  padding: 0 16px;
 
   display: flex;
   align-items: center;
@@ -11,12 +11,12 @@
   top: 0;
   left: 0;
   right: 0;
-  height: 60px;
-  z-index: 100;
+  height: 64px;
+  z-index: 1000;
 }
 
 .header .left-section {
-  width: 208px;
+  width: 200px;
 }
 
 .header .header-link {
@@ -27,7 +27,7 @@
 }
 
 .logo {
-  height: 26px;
+  height: 34px;
 }
 
 .mobile-logo {
@@ -45,32 +45,39 @@
 .middle-section {
   flex: 1;
   display: flex;
-  max-width: 800px;
+  max-width: 900px;
 }
 
 .search-bar {
   flex: 1;
-  height: 38px;
-  padding-left: 15px;
-  border-radius: 5px 0 0 5px;
+  height: 40px;
+  padding: 0 12px;
   border: none;
+  border-radius: 4px 0 0 4px;
 }
 
 .search-button {
-  width: 45px;
+  width: 56px;
   border: none;
-  background: rgb(186, 255, 190);
-  border-radius: 0 5px 5px 0;
+  background: #febd69; /* amazon search button */
+  border-radius: 0 4px 4px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
+
+.search-icon { height: 20px; }
 
 .search-icon {
   height: 20px;
 }
 
 .right-section {
-  width: 180px;
+  width: 360px;
   display: flex;
-  justify-content: end;
+  gap: 14px;
+  justify-content: flex-end;
+  align-items: center;
 }
 
 .cart-link {
@@ -80,15 +87,25 @@
 }
 
 .cart-icon {
-  width: 38px;
+  width: 36px;
 }
 
 .cart-quantity {
   position: absolute;
-  top: 8px;
-  right: 46px;
-  width: 26px;
-  text-align: center;
-  color: rgb(8, 79, 45);
+  top: -6px;
+  right: -6px;
+  background: #f08804;
+  color: white;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
   font-weight: 700;
 }
+
+.account-link, .orders-link { text-align: left; }
+.account-line1, .orders-line1 { font-size: 12px; opacity: 0.9; }
+.account-line2, .orders-line2 { font-size: 13px; font-weight: 700; }

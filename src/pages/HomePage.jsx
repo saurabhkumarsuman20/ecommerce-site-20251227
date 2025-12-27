@@ -1,7 +1,17 @@
-import './Header.css';
+import './header.css';
 import './HomePage.css';
+import { useState, useEffect } from 'react';
+import products from '../data/products';
 
 export function HomePage() {
+  const [cartCount, setCartCount] = useState(0);
+
+  useEffect(() => {
+    const handler = (e) => setCartCount((c) => c + 1);
+    window.addEventListener('add-to-cart', handler);
+    return () => window.removeEventListener('add-to-cart', handler);
+  }, []);
+
   return (
     <>
       {/* HEADER */}
@@ -21,13 +31,19 @@ export function HomePage() {
         </div>
 
         <div className="right-section">
+          <a className="account-link header-link" href="#">
+            <div className="account-line1">Hello, Sign in</div>
+            <div className="account-line2">Account & Lists</div>
+          </a>
+
           <a className="orders-link header-link" href="#">
-            <span className="orders-text">Orders</span>
+            <div className="orders-line1">Returns</div>
+            <div className="orders-line2">& Orders</div>
           </a>
 
           <a className="cart-link header-link" href="#">
             <img className="cart-icon" src="/images/icons/cart-icon.png" />
-            <div className="cart-quantity">3</div>
+            <div className="cart-quantity">{cartCount}</div>
             <div className="cart-text">Cart</div>
           </a>
         </div>
@@ -36,41 +52,47 @@ export function HomePage() {
       {/* PRODUCTS */}
       <div className="home-page">
         <div className="products-grid">
+          {products.map((p) => (
+            <div className="product-container" key={p.id}>
+              <div className="product-image-container">
+                <img className="product-image" src={p.image} alt={p.name} />
+              </div>
 
-          {/* PRODUCT */}
-          <div className="product-container">
-            <div className="product-image-container">
-              <img className="product-image"
-                src="/xd45dimages/products/intermediate-composite-basketball.jpg" />
+              <div className="product-name limit-text-to-2-lines">{p.name}</div>
+
+              <div className="product-rating-container">
+                <img className="product-rating-stars" src={`/images/ratings/rating-${Math.round(p.rating*10)}.png`} />
+                <div className="product-rating-count link-primary">{p.ratingCount}</div>
+              </div>
+
+              <div className="product-price">${p.price.toFixed(2)}</div>
+
+              <div className="product-actions">
+                <button className="add-to-cart-button" onClick={() => handleAddToCart(p)}>Add to Cart</button>
+                <button className="buy-now-button" onClick={() => handleBuyNow(p)}>Buy Now</button>
+              </div>
             </div>
-
-            <div className="product-name limit-text-to-2-lines">
-              Intermediate Size Basketball
-            </div>
-
-            <div className="product-rating-container">
-              <img className="product-rating-stars"
-                src="/images/ratings/rating-40.png" />
-              <div className="product-rating-count link-primary">127</div>
-            </div>
-
-            <div className="product-price">$20.95</div>
-
-            <div className="product-quantity-container">
-              <select>
-                {[...Array(10)].map((_, i) => (
-                  <option key={i}>{i + 1}</option>
-                ))}
-              </select>
-            </div>
-
-            <button className="add-to-cart-button button-primary">
-              Add to Cart
-            </button>
-          </div>
-
+          ))}
         </div>
       </div>
     </>
   );
+}
+
+function handleAddToCart(product) {
+  const raw = localStorage.getItem('cart')
+  const cart = raw ? JSON.parse(raw) : []
+  const existing = cart.find(i => i.id === product.id)
+  if (existing) {
+    existing.qty = (existing.qty || 1) + 1
+  } else {
+    cart.push({ ...product, qty: 1 })
+  }
+  localStorage.setItem('cart', JSON.stringify(cart))
+  const event = new CustomEvent('add-to-cart', { detail: product })
+  window.dispatchEvent(event)
+}
+
+function handleBuyNow(product) {
+  alert(`Buy Now: ${product.name} - $${product.price.toFixed(2)}`);
 }
